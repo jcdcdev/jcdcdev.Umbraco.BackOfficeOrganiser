@@ -27,21 +27,7 @@ export type OrganiseResponse = {
 };
 
 export type PostUmbracoBackofficeorganiserApiOrganiseData = {
-    requestBody?: OrganiseRequest;
+    requestBody?: (OrganiseRequest);
 };
 
-export type PostUmbracoBackofficeorganiserApiOrganiseResponse = OrganiseResponse;
-
-export type $OpenApiTs = {
-    '/umbraco/backofficeorganiser/api/organise': {
-        post: {
-            req: PostUmbracoBackofficeorganiserApiOrganiseData;
-            res: {
-                /**
-                 * Success
-                 */
-                200: OrganiseResponse;
-            };
-        };
-    };
-};
+export type PostUmbracoBackofficeorganiserApiOrganiseResponse = ((OrganiseResponse));

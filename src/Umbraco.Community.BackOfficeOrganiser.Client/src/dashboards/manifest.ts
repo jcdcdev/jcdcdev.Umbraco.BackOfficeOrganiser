@@ -1,4 +1,4 @@
-import type { ManifestDashboard } from "@umbraco-cms/backoffice/extension-registry";
+import {ManifestDashboard} from "@umbraco-cms/backoffice/dashboard";
 
 const dashboards: Array<ManifestDashboard> = [
 	{
@@ -15,6 +15,7 @@ const dashboards: Array<ManifestDashboard> = [
 		conditions: [
 			{
 				alias: 'Umb.Condition.SectionAlias',
+				// @ts-ignore
 				match: 'Umb.Section.Settings'
 			}
 		]

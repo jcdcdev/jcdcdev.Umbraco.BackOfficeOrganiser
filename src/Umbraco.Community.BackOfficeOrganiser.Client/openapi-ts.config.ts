@@ -1,4 +1,4 @@
-import { defineConfig } from '@hey-api/openapi-ts';
+import {defineConfig} from '@hey-api/openapi-ts';
 
 export default defineConfig({
 	input:
@@ -7,6 +7,7 @@ export default defineConfig({
 		format: 'prettier',
 		path: './src/api',
 	},
+	client: "legacy/fetch",
 	types: {
 		enums: 'typescript',
 	},

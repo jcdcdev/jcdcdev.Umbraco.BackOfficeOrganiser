@@ -1,4 +1,3 @@
-using System.Collections;
 using jcdcdev.Umbraco.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models;

@@ -12,8 +12,8 @@ public class DefaultMediaTypeOrganiseAction : IMediaTypeOrganiseAction
 
     public async Task MoveAsync(IMediaType mediaType, IMediaTypeService mediaTypeService)
     {
-        var folderKey = Constants.System.RootKey;
-        var parentId = Constants.System.Root;
+        var folderKey = global::Umbraco.Cms.Core.Constants.System.RootKey;
+        var parentId = global::Umbraco.Cms.Core.Constants.System.Root;
         var folderName = string.Empty;
 
         if (mediaType.IsInternal())
@@ -22,13 +22,13 @@ public class DefaultMediaTypeOrganiseAction : IMediaTypeOrganiseAction
             folderKey = parent.Key;
             folderName = mediaType.Alias switch
             {
-                Constants.Conventions.MediaTypes.File => string.Empty,
-                Constants.Conventions.MediaTypes.Folder => string.Empty,
-                Constants.Conventions.MediaTypes.VideoAlias => "Video",
-                Constants.Conventions.MediaTypes.AudioAlias => "Audio",
-                Constants.Conventions.MediaTypes.ArticleAlias => "Text File",
-                Constants.Conventions.MediaTypes.VectorGraphicsAlias => "Image",
-                Constants.Conventions.MediaTypes.Image => "Image",
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.File => string.Empty,
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.Folder => string.Empty,
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.VideoAlias => "Video",
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.AudioAlias => "Audio",
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.ArticleAlias => "Text File",
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.VectorGraphicsAlias => "Image",
+                global::Umbraco.Cms.Core.Constants.Conventions.MediaTypes.Image => "Image",
                 _ => folderName
             };
         }

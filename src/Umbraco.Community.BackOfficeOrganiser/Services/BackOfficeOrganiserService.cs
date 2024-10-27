@@ -8,28 +8,14 @@ using Umbraco.Community.BackOfficeOrganiser.Organisers.MemberTypes;
 
 namespace Umbraco.Community.BackOfficeOrganiser.Services;
 
-public class BackOfficeOrganiserService : IBackOfficeOrganiserService
+public class BackOfficeOrganiserService(
+    ILogger<BackOfficeOrganiserService> logger,
+    ContentTypeOrganiser contentTypeOrganiser,
+    MediaTypeOrganiser mediaTypeOrganiser,
+    MemberTypeOrganiser memberTypeOrganiser,
+    DataTypeOrganiser dataTypeOrganiser)
+    : IBackOfficeOrganiserService
 {
-    private readonly ContentTypeOrganiser _contentTypeOrganiser;
-    private readonly DataTypeOrganiser _dataTypeOrganiser;
-    private readonly ILogger _logger;
-    private readonly MediaTypeOrganiser _mediaTypeOrganiser;
-    private readonly MemberTypeOrganiser _memberTypeOrganiser;
-
-    public BackOfficeOrganiserService(
-        ILogger<BackOfficeOrganiserService> logger,
-        ContentTypeOrganiser contentTypeOrganiser,
-        MediaTypeOrganiser mediaTypeOrganiser,
-        MemberTypeOrganiser memberTypeOrganiser,
-        DataTypeOrganiser dataTypeOrganiser)
-    {
-        _logger = logger;
-        _contentTypeOrganiser = contentTypeOrganiser;
-        _mediaTypeOrganiser = mediaTypeOrganiser;
-        _memberTypeOrganiser = memberTypeOrganiser;
-        _dataTypeOrganiser = dataTypeOrganiser;
-    }
-
     public async Task<Attempt<OrganiseType>> OrganiseAsync(OrganiseType organise)
     {
         try
@@ -56,7 +42,7 @@ public class BackOfficeOrganiserService : IBackOfficeOrganiserService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "BackOfficeOrganiser: Failed to organise {OrganiseType}", organise);
+            logger.LogError(ex, "BackOfficeOrganiser: Failed to organise {OrganiseType}", organise);
             return Attempt<OrganiseType>.Fail(ex);
         }
 
@@ -67,7 +53,7 @@ public class BackOfficeOrganiserService : IBackOfficeOrganiserService
     {
         try
         {
-            await _dataTypeOrganiser.OrganiseAllAsync();
+            await dataTypeOrganiser.OrganiseAllAsync();
         }
         catch (Exception ex)
         {
@@ -81,7 +67,7 @@ public class BackOfficeOrganiserService : IBackOfficeOrganiserService
     {
         try
         {
-            await _memberTypeOrganiser.OrganiseAllAsync();
+            await memberTypeOrganiser.OrganiseAllAsync();
         }
         catch (Exception ex)
         {
@@ -95,7 +81,7 @@ public class BackOfficeOrganiserService : IBackOfficeOrganiserService
     {
         try
         {
-            await _mediaTypeOrganiser.OrganiseAllAsync();
+            await mediaTypeOrganiser.OrganiseAllAsync();
         }
         catch (Exception ex)
         {
@@ -109,7 +95,7 @@ public class BackOfficeOrganiserService : IBackOfficeOrganiserService
     {
         try
         {
-            await _contentTypeOrganiser.OrganiseAllAsync();
+            await contentTypeOrganiser.OrganiseAllAsync();
         }
         catch (Exception ex)
         {

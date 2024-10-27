@@ -1,15 +1,10 @@
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Models;
 
 namespace Umbraco.Community.BackOfficeOrganiser.Organisers;
 
 public abstract class BackOfficeOrganiserBase<T>(ILogger logger) : IBackOfficeOrganiser<T>
 {
     public readonly ILogger Logger = logger;
-
-    protected virtual void PostOrganiseAll()
-    {
-    }
 
     public async Task OrganiseAllAsync()
     {
@@ -35,6 +30,10 @@ public abstract class BackOfficeOrganiserBase<T>(ILogger logger) : IBackOfficeOr
     }
 
     public abstract Task OrganiseAsync(T item);
+
+    protected virtual void PostOrganiseAll()
+    {
+    }
 
     protected abstract Task<IEnumerable<T>> GetAllAsync();
 }

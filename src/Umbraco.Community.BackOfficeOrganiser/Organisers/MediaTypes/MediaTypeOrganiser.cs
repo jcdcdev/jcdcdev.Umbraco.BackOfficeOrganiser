@@ -21,7 +21,7 @@ public class MediaTypeOrganiser(
             await organiser.MoveAsync(mediaType, mediaTypeService);
         }
     }
-    
+
     protected override void PostOrganiseAll()
     {
         mediaTypeService.DeleteAllEmptyContainers();

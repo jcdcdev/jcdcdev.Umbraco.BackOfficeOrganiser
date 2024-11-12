@@ -1,11 +1,10 @@
 using jcdcdev.Umbraco.Core.Extensions;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Community.BackOfficeOrganiser.Organisers.DataTypes;
 using Umbraco.Extensions;
 
-namespace TestSite;
+namespace Umbraco.Community.BackOfficeOrganiser.TestSite;
 
 public class ExampleDataTypeOrganiseAction : IDataTypeOrganiseAction
 {
@@ -14,6 +13,6 @@ public class ExampleDataTypeOrganiseAction : IDataTypeOrganiseAction
     public async Task MoveAsync(IDataType dataType, IDataTypeService dataTypeService, IDataTypeContainerService dataTypeContainerService)
     {
         var folder = dataTypeService.GetOrCreateFolder("📂 - Media");
-        await dataTypeService.MoveAsync(dataType, folder.Key, Constants.Security.SuperUserKey);
+        await dataTypeService.MoveAsync(dataType, folder.Key, Cms.Core.Constants.Security.SuperUserKey);
     }
 }

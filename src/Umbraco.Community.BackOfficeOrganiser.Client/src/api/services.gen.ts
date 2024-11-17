@@ -11,9 +11,11 @@ import type { PostUmbracoBackofficeorganiserApiOrganiseData, PostUmbracoBackoffi
  * @returns unknown OK
  * @throws ApiError
  */
-export const postUmbracoBackofficeorganiserApiOrganise = (data: PostUmbracoBackofficeorganiserApiOrganiseData = {}): CancelablePromise<PostUmbracoBackofficeorganiserApiOrganiseResponse> => { return __request(OpenAPI, {
-    method: 'POST',
-    url: '/umbraco/backofficeorganiser/api/organise',
-    body: data.requestBody,
-    mediaType: 'application/json'
-}); };
+export const postUmbracoBackofficeorganiserApiOrganise = (data: PostUmbracoBackofficeorganiserApiOrganiseData = {}): CancelablePromise<PostUmbracoBackofficeorganiserApiOrganiseResponse> => {
+    return __request(OpenAPI, {
+        method: 'POST',
+        url: '/umbraco/backofficeorganiser/api/organise',
+        body: data.requestBody,
+        mediaType: 'application/json'
+    });
+};

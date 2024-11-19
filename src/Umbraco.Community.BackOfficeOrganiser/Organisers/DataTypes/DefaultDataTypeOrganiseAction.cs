@@ -1,7 +1,6 @@
 using jcdcdev.Umbraco.Core.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Community.BackOfficeOrganiser.Models;
@@ -14,9 +13,9 @@ public class DefaultDataTypeOrganiseAction(IOptions<BackOfficeOrganiserOptions> 
     private readonly ILogger _logger = logger;
     private readonly BackOfficeOrganiserOptions _options = options.Value;
 
-    public bool CanMove(IDataType dataType, IDataTypeService dataTypeService) => true;
+    public bool CanMove(IDataType dataType, IDataTypeService dataTypeService, IDataTypeContainerService dataTypeContainerService) => true;
 
-    public async Task MoveAsync(IDataType dataType, IDataTypeService dataTypeService)
+    public async Task MoveAsync(IDataType dataType, IDataTypeService dataTypeService, IDataTypeContainerService dataTypeContainerService)
     {
         string internalFolder;
         if (dataType.IsInternalUmbracoEditor())
@@ -37,12 +36,12 @@ public class DefaultDataTypeOrganiseAction(IOptions<BackOfficeOrganiserOptions> 
         if (folder.IsNullOrWhiteSpace())
         {
             _logger.LogWarning("Failed to determine folder name. {DataType} will be considered Custom", dataType.Name);
-            await dataTypeService.MoveAsync(dataType, parentFolder.Key, Constants.Security.SuperUserKey);
+            await dataTypeService.MoveAsync(dataType, parentFolder.Key, Cms.Core.Constants.Security.SuperUserKey);
             return;
         }
 
         var dataTypeFolder = dataTypeService.GetOrCreateFolder(folder, parentFolder.Id);
-        await dataTypeService.MoveAsync(dataType, dataTypeFolder.Key, Constants.Security.SuperUserKey);
+        await dataTypeService.MoveAsync(dataType, dataTypeFolder.Key, Cms.Core.Constants.Security.SuperUserKey);
     }
 
     private static string ResolveDataTypeFolderName(IDataType dataType)
@@ -55,53 +54,55 @@ public class DefaultDataTypeOrganiseAction(IOptions<BackOfficeOrganiserOptions> 
     {
         var folder = dataType.EditorAlias switch
         {
-            Constants.PropertyEditors.Aliases.BlockList => "Block List",
+            Cms.Core.Constants.PropertyEditors.Aliases.BlockList => "Block List",
 
-            Constants.PropertyEditors.Aliases.NestedContent => "Nested Content",
+            Cms.Core.Constants.PropertyEditors.Aliases.NestedContent => "Nested Content",
 
-            Constants.PropertyEditors.Aliases.BlockGrid => "Grid",
-            Constants.PropertyEditors.Aliases.Grid => "Grid",
+            Cms.Core.Constants.PropertyEditors.Aliases.BlockGrid => "Grid",
+            Cms.Core.Constants.PropertyEditors.Aliases.Grid => "Grid",
 
-            Constants.PropertyEditors.Aliases.ImageCropper => "Image Cropper",
+            Cms.Core.Constants.PropertyEditors.Aliases.ImageCropper => "Image Cropper",
 
-            Constants.PropertyEditors.Aliases.ListView => "List View",
+            Cms.Core.Constants.PropertyEditors.Aliases.ListView => "List View",
 
-            Constants.PropertyEditors.Aliases.Boolean => "Checkbox",
-            Constants.PropertyEditors.Aliases.UploadField => "Upload",
+            Cms.Core.Constants.PropertyEditors.Aliases.Boolean => "Checkbox",
+            Cms.Core.Constants.PropertyEditors.Aliases.UploadField => "Upload",
 
-            Constants.PropertyEditors.Aliases.Tags => "Tags",
+            Cms.Core.Constants.PropertyEditors.Aliases.Tags => "Tags",
 
-            Constants.PropertyEditors.Aliases.CheckBoxList => "List",
-            Constants.PropertyEditors.Aliases.DropDownListFlexible => "List",
-            Constants.PropertyEditors.Aliases.RadioButtonList => "List",
+            Cms.Core.Constants.PropertyEditors.Aliases.CheckBoxList => "List",
+            Cms.Core.Constants.PropertyEditors.Aliases.DropDownListFlexible => "List",
+            Cms.Core.Constants.PropertyEditors.Aliases.RadioButtonList => "List",
 
-            Constants.PropertyEditors.Aliases.ColorPickerEyeDropper => "Picker",
-            Constants.PropertyEditors.Aliases.ColorPicker => "Picker",
-            Constants.PropertyEditors.Aliases.ContentPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultipleMediaPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MemberPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MemberGroupPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultiNodeTreePicker => "Picker",
-            Constants.PropertyEditors.Aliases.MediaPicker3 => "Picker",
-            Constants.PropertyEditors.Aliases.UserPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultiUrlPicker => "Picker",
-            Constants.PropertyEditors.Aliases.PickerRelations => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.ColorPickerEyeDropper => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.ColorPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.ContentPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MultipleMediaPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MemberPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MemberGroupPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MultiNodeTreePicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MediaPicker3 => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.UserPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.MultiUrlPicker => "Picker",
+            Cms.Core.Constants.PropertyEditors.Aliases.PickerRelations => "Picker",
 
-            Constants.PropertyEditors.Aliases.Decimal => "Number",
-            Constants.PropertyEditors.Aliases.Slider => "Number",
-            Constants.PropertyEditors.Aliases.Integer => "Number",
+            Cms.Core.Constants.PropertyEditors.Aliases.Decimal => "Number",
+            Cms.Core.Constants.PropertyEditors.Aliases.Slider => "Number",
+            Cms.Core.Constants.PropertyEditors.Aliases.Integer => "Number",
 
-            Constants.PropertyEditors.Aliases.DateTime => "Date",
+            Cms.Core.Constants.PropertyEditors.Aliases.DateTime => "Date",
 
-            Constants.PropertyEditors.Aliases.MultipleTextstring => "Text",
-            Constants.PropertyEditors.Aliases.TextBox => "Text",
-            Constants.PropertyEditors.Aliases.TextArea => "Text",
-            Constants.PropertyEditors.Aliases.EmailAddress => "Text",
-            Constants.PropertyEditors.Aliases.Label => "Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.MultipleTextstring => "Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.TextBox => "Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.TextArea => "Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.EmailAddress => "Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.Label => "Text",
 
-            Constants.PropertyEditors.Aliases.TinyMce => "Rich Text",
-            Constants.PropertyEditors.Aliases.RichText => "Rich Text",
-            Constants.PropertyEditors.Aliases.MarkdownEditor => "Rich Text",
+#pragma warning disable CS0618 // Type or member is obsolete
+            Cms.Core.Constants.PropertyEditors.Aliases.TinyMce => "Rich Text",
+#pragma warning restore CS0618 // Type or member is obsolete
+            Cms.Core.Constants.PropertyEditors.Aliases.RichText => "Rich Text",
+            Cms.Core.Constants.PropertyEditors.Aliases.MarkdownEditor => "Rich Text",
 
             _ => ResolveDataTypeFolderName(dataType)
         };

@@ -1,6 +1,5 @@
 using jcdcdev.Umbraco.Core.Extensions;
 using StackExchange.Profiling.Internal;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 
@@ -12,7 +11,7 @@ public class DefaultMemberTypeOrganiseAction : IMemberTypeOrganiseAction
 
     public async Task MoveAsync(IMemberType memberType, IMemberTypeService memberTypeService)
     {
-        var folderKey = Constants.System.RootKey;
+        var folderKey = Cms.Core.Constants.System.RootKey;
         var folderName = string.Empty;
 
         if (memberType.CompositionIds().Any())

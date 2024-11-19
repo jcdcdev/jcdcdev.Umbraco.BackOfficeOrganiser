@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Infrastructure.Manifest;
 using Umbraco.Community.BackOfficeOrganiser.Models;
 using Umbraco.Community.BackOfficeOrganiser.Organisers.ContentTypes;
 using Umbraco.Community.BackOfficeOrganiser.Organisers.DataTypes;
@@ -18,6 +19,7 @@ public class Composer : IComposer
         builder.Services.AddOptions<BackOfficeOrganiserOptions>()
             .BindConfiguration(BackOfficeOrganiserOptions.SectionName);
 
+        builder.Services.AddSingleton<IPackageManifestReader, PackageManifestReader>();
         builder.Services.AddSingleton<IBackOfficeOrganiserService, BackOfficeOrganiserService>();
 
         builder.Services.AddSingleton<DataTypeOrganiser>();

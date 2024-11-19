@@ -1,6 +1,5 @@
 using jcdcdev.Umbraco.Core.Extensions;
 using StackExchange.Profiling.Internal;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 
@@ -12,7 +11,7 @@ public class DefaultContentTypeOrganiseAction : IContentTypeOrganiseAction
 
     public async Task MoveAsync(IContentType contentType, IContentTypeService contentTypeService)
     {
-        var folderKey = Constants.System.RootKey;
+        var folderKey = Cms.Core.Constants.System.RootKey;
         var folderName = string.Empty;
         var isComposition = contentTypeService.GetComposedOf(contentType.Id).Any();
 

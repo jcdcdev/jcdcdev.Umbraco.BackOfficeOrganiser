@@ -23,7 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="jcdcdev.Umbraco.Core" Version="[14.0.0,15.0.0)"/>
+		<PackageReference Include="jcdcdev.Umbraco.Core" Version="[14.0.2,15.0.0)"/>
 		<PackageReference Include="Umbraco.Cms.Core" Version="[14.0.0,15.0.0)"/>
 		<PackageReference Include="Umbraco.Cms.Infrastructure" Version="[14.0.0,15.0.0)"/>
 	</ItemGroup>

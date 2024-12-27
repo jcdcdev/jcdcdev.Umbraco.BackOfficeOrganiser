@@ -3,9 +3,9 @@ import type { ManifestDashboard } from "@umbraco-cms/backoffice/extension-regist
 const dashboards: Array<ManifestDashboard> = [
 	{
 		type: 'dashboard',
-		name: 'timedashboard',
+		name: 'organiserdashboard',
 		alias: 'umbraco.community.backofficeorganiser',
-		elementName: 'timedashboard-dashboard',
+		elementName: 'organiserdashboard-dashboard',
 		js: () => import("./organiser.dashboard.ts"),
 		weight: -10,
 		meta: {

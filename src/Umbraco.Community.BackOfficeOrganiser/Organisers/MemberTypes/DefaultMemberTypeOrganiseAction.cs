@@ -12,7 +12,7 @@ public class DefaultMemberTypeOrganiseAction : IMemberTypeOrganiseAction
 
     public async Task MoveAsync(IMemberType memberType, IMemberTypeService memberTypeService)
     {
-        var folderKey = Constants.System.RootKey;
+        var folderKey = global::Umbraco.Cms.Core.Constants.System.RootKey;
         var folderName = string.Empty;
 
         if (memberType.CompositionIds().Any())

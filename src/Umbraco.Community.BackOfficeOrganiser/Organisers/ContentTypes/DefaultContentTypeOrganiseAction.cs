@@ -12,7 +12,7 @@ public class DefaultContentTypeOrganiseAction : IContentTypeOrganiseAction
 
     public async Task MoveAsync(IContentType contentType, IContentTypeService contentTypeService)
     {
-        var folderKey = Constants.System.RootKey;
+        var folderKey = global::Umbraco.Cms.Core.Constants.System.RootKey;
         var folderName = string.Empty;
         var isComposition = contentTypeService.GetComposedOf(contentType.Id).Any();
 

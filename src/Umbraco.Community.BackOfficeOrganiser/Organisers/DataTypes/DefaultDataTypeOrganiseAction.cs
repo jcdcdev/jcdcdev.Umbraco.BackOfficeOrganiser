@@ -37,12 +37,12 @@ public class DefaultDataTypeOrganiseAction(IOptions<BackOfficeOrganiserOptions> 
         if (folder.IsNullOrWhiteSpace())
         {
             _logger.LogWarning("Failed to determine folder name. {DataType} will be considered Custom", dataType.Name);
-            await dataTypeService.MoveAsync(dataType, parentFolder.Key, Constants.Security.SuperUserKey);
+            await dataTypeService.MoveAsync(dataType, parentFolder.Key, global::Umbraco.Cms.Core.Constants.Security.SuperUserKey);
             return;
         }
 
         var dataTypeFolder = dataTypeService.GetOrCreateFolder(folder, parentFolder.Id);
-        await dataTypeService.MoveAsync(dataType, dataTypeFolder.Key, Constants.Security.SuperUserKey);
+        await dataTypeService.MoveAsync(dataType, dataTypeFolder.Key, global::Umbraco.Cms.Core.Constants.Security.SuperUserKey);
     }
 
     private static string ResolveDataTypeFolderName(IDataType dataType)
@@ -55,53 +55,53 @@ public class DefaultDataTypeOrganiseAction(IOptions<BackOfficeOrganiserOptions> 
     {
         var folder = dataType.EditorAlias switch
         {
-            Constants.PropertyEditors.Aliases.BlockList => "Block List",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.BlockList => "Block List",
 
-            Constants.PropertyEditors.Aliases.NestedContent => "Nested Content",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.NestedContent => "Nested Content",
 
-            Constants.PropertyEditors.Aliases.BlockGrid => "Grid",
-            Constants.PropertyEditors.Aliases.Grid => "Grid",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.BlockGrid => "Grid",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Grid => "Grid",
 
-            Constants.PropertyEditors.Aliases.ImageCropper => "Image Cropper",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ImageCropper => "Image Cropper",
 
-            Constants.PropertyEditors.Aliases.ListView => "List View",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ListView => "List View",
 
-            Constants.PropertyEditors.Aliases.Boolean => "Checkbox",
-            Constants.PropertyEditors.Aliases.UploadField => "Upload",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Boolean => "Checkbox",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.UploadField => "Upload",
 
-            Constants.PropertyEditors.Aliases.Tags => "Tags",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Tags => "Tags",
 
-            Constants.PropertyEditors.Aliases.CheckBoxList => "List",
-            Constants.PropertyEditors.Aliases.DropDownListFlexible => "List",
-            Constants.PropertyEditors.Aliases.RadioButtonList => "List",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.CheckBoxList => "List",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.DropDownListFlexible => "List",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.RadioButtonList => "List",
 
-            Constants.PropertyEditors.Aliases.ColorPickerEyeDropper => "Picker",
-            Constants.PropertyEditors.Aliases.ColorPicker => "Picker",
-            Constants.PropertyEditors.Aliases.ContentPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultipleMediaPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MemberPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MemberGroupPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultiNodeTreePicker => "Picker",
-            Constants.PropertyEditors.Aliases.MediaPicker3 => "Picker",
-            Constants.PropertyEditors.Aliases.UserPicker => "Picker",
-            Constants.PropertyEditors.Aliases.MultiUrlPicker => "Picker",
-            Constants.PropertyEditors.Aliases.PickerRelations => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ColorPickerEyeDropper => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ColorPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.ContentPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MultipleMediaPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MemberPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MemberGroupPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MultiNodeTreePicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MediaPicker3 => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.UserPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MultiUrlPicker => "Picker",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.PickerRelations => "Picker",
 
-            Constants.PropertyEditors.Aliases.Decimal => "Number",
-            Constants.PropertyEditors.Aliases.Slider => "Number",
-            Constants.PropertyEditors.Aliases.Integer => "Number",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Decimal => "Number",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Slider => "Number",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Integer => "Number",
 
-            Constants.PropertyEditors.Aliases.DateTime => "Date",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.DateTime => "Date",
 
-            Constants.PropertyEditors.Aliases.MultipleTextstring => "Text",
-            Constants.PropertyEditors.Aliases.TextBox => "Text",
-            Constants.PropertyEditors.Aliases.TextArea => "Text",
-            Constants.PropertyEditors.Aliases.EmailAddress => "Text",
-            Constants.PropertyEditors.Aliases.Label => "Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MultipleTextstring => "Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.TextBox => "Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.TextArea => "Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.EmailAddress => "Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.Label => "Text",
 
-            Constants.PropertyEditors.Aliases.TinyMce => "Rich Text",
-            Constants.PropertyEditors.Aliases.RichText => "Rich Text",
-            Constants.PropertyEditors.Aliases.MarkdownEditor => "Rich Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.TinyMce => "Rich Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.RichText => "Rich Text",
+            global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.MarkdownEditor => "Rich Text",
 
             _ => ResolveDataTypeFolderName(dataType)
         };

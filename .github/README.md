@@ -14,7 +14,7 @@ Is your backoffice a bit untidy?
     - Data Types
 - Automatically sorts on save (configurable)
 
-![A screenshot of the Back Office Organiser in action](https://raw.githubusercontent.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/main/docs/screenshots/backoffice.png)
+![A screenshot of the Back Office Organiser in action](https://raw.githubusercontent.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/v15/docs/screenshots/backoffice.png)
 
 ## Quick Start
 

@@ -111,7 +111,7 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 	}
 
 	render() {
-		const organiseTypes = this.types.map((type, i) => {
+		const organiseTypes = this.types.map((type) => {
 			const look = type.selected ? "primary" : "outline";
 			const icon = type.selected ? "check" : "remove";
 			const text = type.selected ? this.localize.term("boo_selected") : this.localize.term("boo_disabled");

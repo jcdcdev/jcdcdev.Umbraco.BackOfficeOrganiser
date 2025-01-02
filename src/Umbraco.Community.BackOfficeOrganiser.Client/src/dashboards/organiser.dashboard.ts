@@ -1,92 +1,136 @@
-import {customElement, property, state} from "lit/decorators.js";
+import {customElement, state} from "lit/decorators.js";
 import {css, html, LitElement} from "lit";
 import {UmbElementMixin} from "@umbraco-cms/backoffice/element-api";
 import {UMB_NOTIFICATION_CONTEXT, UmbNotificationContext} from "@umbraco-cms/backoffice/notification";
-import {BackofficeOrganiserContext} from "../context/organiser.context.ts";
+import {BACKOFFICE_ORGANISER_CONTEXT_TOKEN, BackofficeOrganiserContext} from "../context/organiser.context.ts";
 import {OrganiseTypeModel} from "../models/organise-type-model.ts";
 import {OrganiseType} from "../models/organise-type.ts";
+import {UMB_CONFIRM_MODAL, UMB_MODAL_MANAGER_CONTEXT, UmbModalManagerContext} from "@umbraco-cms/backoffice/modal";
+import {OrganiseInfoModel, OrganiseInfoResponse} from "../api";
 
 @customElement('backoffice-organiser')
 export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 
-	@property()
+	@state()
 	loading: boolean = false;
-
-	#backofficeOrganiserContext?: BackofficeOrganiserContext;
-	#notificationContext?: UmbNotificationContext;
-
-	@property()
-	confirmRequired: boolean = false;
-
+	@state()
+	contentTypes: boolean = false;
+	@state()
+	mediaTypes: boolean = false;
+	@state()
+	memberTypes: boolean = false;
+	@state()
+	dataTypes: boolean = false;
+	@state()
+	info?: OrganiseInfoResponse;
 	@state()
 	types: OrganiseTypeModel[] = [
 		{
 			value: 1,
-			label: "Content Types",
-			description: "Organise content types",
+			label: this.localize.term("boo_contentTypes"),
 			selected: false,
 		},
 		{
 			value: 2,
-			label: "Media Types",
-			description: "Organise media types",
+			label: this.localize.term("boo_mediaTypes"),
 			selected: false,
 		},
 		{
 			value: 3,
-			label: "Member Types",
-			description: "Organise member types",
+			label: this.localize.term("boo_memberTypes"),
 			selected: false,
 		},
 		{
 			value: 4,
-			label: "Data Types",
-			description: "Organise data types",
+			label: this.localize.term("boo_dataTypes"),
 			selected: false,
 		}
 	];
 
-	// @state()
-	// toast: Toast | null = null;
-	private contentTypes: boolean = false;
-	private mediaTypes: boolean = false;
-	private memberTypes: boolean = false;
-	private dataTypes: boolean = false;
+	#modalManagerContext?: UmbModalManagerContext;
+	#backofficeOrganiserContext?: BackofficeOrganiserContext;
+	#notificationContext?: UmbNotificationContext;
 
 	constructor() {
 		super();
+		this.consumeContext(BACKOFFICE_ORGANISER_CONTEXT_TOKEN, async (context) => {
+			this.#backofficeOrganiserContext = context;
+			const data = await context.getInfo();
+			if (!data.error && data.data) {
+				this.info = data.data;
+			}
+		});
 
-		this.#backofficeOrganiserContext = new BackofficeOrganiserContext(this);
+		this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (context) => {
+			this.#modalManagerContext = context;
+		});
 
 		this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
 			this.#notificationContext = context;
 		});
 	}
 
-	render() {
-		let modal = null;
-		if (this.confirmRequired) {
-			modal = this.renderConfirm();
-		}
+	_showInfoModal(type: OrganiseTypeModel) {
+		const content = this.renderModal(type);
+		const modalContext = this.#modalManagerContext?.open(
+			this, UMB_CONFIRM_MODAL,
+			{
+				data: {
+					headline: type.label,
+					content: content,
+					color: "positive",
+					confirmLabel: this.localize.term("general_close"),
+					cancelLabel: " "
+				}
+			}
+		);
 
+		modalContext
+			?.onSubmit()
+			.then(() => {
+			})
+			.catch(() => {
+			});
+	}
+
+	renderModal(type: OrganiseTypeModel) {
+		const items = this._getItems(type.value);
+
+		const organiseActions = items.map((x, i) => html`
+			<div>
+				<h4>${i + 1}. ${x.name} </h4>
+				<p>${x.description}</p>
+			</div>
+		`);
+
+		return html
+			`
+				<p>${this.localize.term("boo_organiseActionInfoIntroduction")}</p>
+				${organiseActions}
+			`;
+	}
+
+	render() {
 		const organiseTypes = this.types.map(type => {
 			const look = type.selected ? "primary" : "placeholder";
+			const label = type.label;
 			return html
 				`
-					<uui-button @click="${() => this.toggleType(type)}" style="--uui-button-height: 200px" look="${look}">
-						${type.label}
+					<uui-button label="${label}" @click="${() => this._toggleType(type)}" style="--uui-button-height: 200px" look="${look}">
+						${label}
 					</uui-button>
 				`;
 		})
 
 		const disableButton = this.types.filter(x => x.selected).length === 0;
 		const form = html`
+
 			<uui-form>
-				<form id="backoffice-organiser-form" @submit=${this.onSubmit} name="backofficeOrganiserForm">
+				<form id="backoffice-organiser-form" @submit=${this._onSubmit} name="backofficeOrganiserForm">
 					<uui-form-layout-item>
-						<uui-label slot="label" for="parent" required="">Select types</uui-label>
+						<uui-label slot="label" for="parent" required="">${this.localize.term("boo_selectTypesLabel")}</uui-label>
 						<span slot="description">
-							Select the types to organise
+							${this.localize.term("boo_selectTypes")}
 						</span>
 						<div class="organise-type-container">
 							${organiseTypes}
@@ -102,50 +146,63 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 
 		return html`
 			<div class="dashboard">
+				<uui-box headline="${this.localize.term("boo_title")}">
+					<p>
+						${this.localize.term("boo_introduction")}
+					</p>
+					<div>
 
-				<uui-box headline="Welcome">
-					<p>
-						This dashboard is designed to help you organise your Document Types, Media Types, Member Types and Data Types.
-					</p>
-					<p>
-						To get started, select at least one type to organise and click the submit button.
-					</p>
-					<uui-icon-registry-essential>
+						${this.types.map(x => {
+							const count = this._getItems(x.value).length;
+							return html`
+
+								<div>
+									<div>
+										<h5>
+											${x.label}
+										</h5>
+										<p>
+											${count} ${this.localize.term("boo_numberOfOrganisers", count)}
+										</p>
+									</div>
+									<uui-button @click="${() => this._showInfoModal(x)}">
+										${this.localize.term("general_info")}
+									</uui-button>
+								</div>
+							`;
+						})}
+					</div>
+					<uui-button-group>
 						<uui-button look="outline"
 									href="https://github.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/?tab=readme-ov-file#umbracocommunitybackofficeorganiser"
 									target="_blank">
 							<uui-icon name="document"></uui-icon>
-							Documentation
+							${this.localize.term("boo_documentation")}
 						</uui-button>
-
 						<uui-button look="outline"
 									href="https://github.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/issues/new?assignees=bug&template=bug.yml"
 									target="_blank">
 							<uui-icon name="alert"></uui-icon>
-							Report a Bug
+							${this.localize.term("boo_reportBug")}
 						</uui-button>
-
 						<uui-button look="outline"
 									href="https://github.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/issues/new?assignees=enhancement&template=feature_request.yml"
 									target="_blank">
 							<uui-icon name="wand"></uui-icon>
-							Request a Feature
+							${this.localize.term("boo_requestFeature")}
 						</uui-button>
-					</uui-icon-registry-essential>
-
+					</uui-button-group>
 				</uui-box>
 				<br>
-				<uui-box headline="Organise">
+				<uui-box headline="${this.localize.term("boo_organise")}">
 					${this.loading ? loader : form}
+
 				</uui-box>
-				<uui-modal-container>
-					${modal}
-				</uui-modal-container>
 			</div>
 		`;
 	}
 
-	private toggleType(type: OrganiseTypeModel) {
+	_toggleType(type: OrganiseTypeModel) {
 		type.selected = !type.selected;
 		switch (type.value) {
 			case OrganiseType.ContentTypes:
@@ -164,7 +221,7 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 		this.requestUpdate();
 	}
 
-	private onSubmit = (e: Event) => {
+	_onSubmit = async (e: Event) => {
 		e.preventDefault();
 		const form = e.currentTarget as HTMLFormElement;
 		const isValid = form.checkValidity();
@@ -172,11 +229,41 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 			return;
 		}
 
-		this.confirmRequired = true;
+		const content = html`
+			<p>
+				${this.localize.term("boo_confirmMessage")}
+			</p>
+			<ul>
+				${this.types.filter(x => x.selected).map(x =>
+					html`
+						<li>${x.label}</li>
+					`)}
+			</ul>
+			<p>
+				<strong>${this.localize.term("boo_confirmWarning")}</strong>
+			</p>
+		`
+		const modalContext = this.#modalManagerContext?.open(
+			this, UMB_CONFIRM_MODAL,
+			{
+				data: {
+					headline: `${this.localize.term("boo_confirmHeadline")}`,
+					content: content,
+					color: "danger"
+				}
+			}
+		);
+
+		modalContext
+			?.onSubmit()
+			.then(() => {
+				this._confirmOrganise();
+			})
+			.catch(() => {
+			});
 	};
 
-	private confirmOrganise = async () => {
-		this.confirmRequired = false;
+	_confirmOrganise = async () => {
 		this.loading = true;
 		const request = {
 			requestBody: {
@@ -199,49 +286,16 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 			}
 		});
 
+		this.types.forEach(x => x.selected = false);
 		this.loading = false;
 	};
 
-	renderConfirm = () => html`
-		<uui-modal-dialog @close=${this.cancelOrganise}>
-			<uui-dialog>
-				<uui-dialog-layout headline="Confirm Organise">
-					<p>
-						The following types will be organised:
-					</p>
-					<ul>
-						${this.types.filter(x => x.selected).map(x =>
-							html`
-								<li>${x.label}</li>
-							`)}
-					</ul>
-					<div class="alert">
-						<span>
-                        This cannot be undone!
-						</span>
-					</div>
-					<uui-button slot="actions"
-								@click="${this.cancelOrganise}">Cancel
-					</uui-button>
-					<uui-button slot="actions"
-								@click="${this.confirmOrganise}"
-								look="primary">Confirm
-					</uui-button>
-				</uui-dialog-layout>
-			</uui-dialog>
-		</uui-modal-dialog>
-	`;
-
-	private cancelOrganise() {
-		this.confirmRequired = false
-	}
-
 	static styles = [
 		css`
-			.dashboard{
-				padding:24px;
+			.dashboard {
+				padding: 24px;
 			}
-			
+
 			.organise-type-container uui-button {
 				width: 100%;
 			}
@@ -262,6 +316,7 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 			}
 
 			.organise-type {
+				width: 100%;
 				background-color: var(--uui-color-background);
 				cursor: pointer;
 				padding: var(--uui-size-6);
@@ -271,14 +326,29 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 				background-color: var(--uui-color-selected);
 				color: white;
 			}
-
-			.alert {
-				padding: var(--uui-size-3);
-				background-color: var(--uui-color-danger-emphasis);
-				color: var(--uui-color-danger-contrast);
-			}
 		`
 	]
+
+	private _getItems(value: OrganiseType) {
+		let items = Array<OrganiseInfoModel>();
+		switch (value) {
+			case OrganiseType.ContentTypes:
+				items = this.info?.contentTypes ?? [];
+				break;
+			case OrganiseType.MediaTypes:
+				items = this.info?.mediaTypes ?? [];
+				break;
+			case OrganiseType.MemberTypes:
+				items = this.info?.memberTypes ?? [];
+				break;
+			case OrganiseType.DataTypes:
+				items = this.info?.dataTypes ?? [];
+				break;
+		}
+
+		return items;
+
+	}
 }
 
 declare global {

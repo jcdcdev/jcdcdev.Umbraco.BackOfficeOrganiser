@@ -9,7 +9,7 @@ const dashboards: Array<ManifestDashboard> = [
 		js: () => import("./organiser.dashboard.ts"),
 		weight: -10,
 		meta: {
-			label: 'Backoffice Organiser',
+			label: '#boo_dashboardLabel',
 			pathname: 'backoffice-organiser'
 		},
 		conditions: [

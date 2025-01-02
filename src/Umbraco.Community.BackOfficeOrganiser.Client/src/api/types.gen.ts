@@ -8,6 +8,19 @@ export type NotificationHeaderModel = {
     type: EventMessageTypeModel;
 };
 
+export type OrganiseInfoModel = {
+    alias: string;
+    name: string;
+    description: string;
+};
+
+export type OrganiseInfoResponse = {
+    dataTypes: Array<(OrganiseInfoModel)>;
+    contentTypes: Array<(OrganiseInfoModel)>;
+    mediaTypes: Array<(OrganiseInfoModel)>;
+    memberTypes: Array<(OrganiseInfoModel)>;
+};
+
 export type OrganiseRequest = {
     dataTypes: boolean;
     contentTypes: boolean;
@@ -20,8 +33,10 @@ export type OrganiseResponse = {
     readonly message: string;
 };
 
-export type PostUmbracoBackofficeorganiserApiOrganiseData = {
+export type GetUmbracoBackOfficeOrganiserApiV1InfoResponse = ((OrganiseInfoResponse));
+
+export type PostUmbracoBackOfficeOrganiserApiV1OrganiseData = {
     requestBody?: (OrganiseRequest);
 };
 
-export type PostUmbracoBackofficeorganiserApiOrganiseResponse = ((OrganiseResponse));
+export type PostUmbracoBackOfficeOrganiserApiV1OrganiseResponse = ((OrganiseResponse));

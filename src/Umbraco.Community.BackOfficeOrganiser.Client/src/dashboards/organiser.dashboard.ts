@@ -98,7 +98,7 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 
 		const organiseActions = items.map((x, i) => html`
 			<div>
-				<h4>${i + 1}. ${x.name} </h4>
+				<h3>${i + 1}. ${x.name}</h3>
 				<p>${x.description}</p>
 			</div>
 		`);
@@ -111,20 +111,36 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 	}
 
 	render() {
-		const organiseTypes = this.types.map(type => {
-			const look = type.selected ? "primary" : "placeholder";
+		const organiseTypes = this.types.map((type, i) => {
+			const look = type.selected ? "primary" : "outline";
+			const icon = type.selected ? "check" : "remove";
+			const text = type.selected ? this.localize.term("boo_selected") : this.localize.term("boo_disabled");
 			const label = type.label;
+			const count = this._getItems(type.value).length;
 			return html
 				`
-					<uui-button label="${label}" @click="${() => this._toggleType(type)}" style="--uui-button-height: 200px" look="${look}">
-						${label}
-					</uui-button>
+					<div class="organiser-type">
+						<h3>${type.label}</h3>
+						<p>
+							<uui-button
+								look="placeholder"
+								label="${this.localize.term("general_info")}"
+								color="info"
+								@click="${() => this._showInfoModal(type)}">
+								<uui-icon name="info"></uui-icon>
+								${count} ${this.localize.term("boo_numberOfOrganisers", count)}
+							</uui-button>
+						</p>
+						<uui-button label="${label}" @click="${() => this._toggleType(type)}" look="${look}">
+							<uui-icon name="${icon}"></uui-icon>
+							${text}
+						</uui-button>
+					</div>
 				`;
 		})
 
 		const disableButton = this.types.filter(x => x.selected).length === 0;
 		const form = html`
-
 			<uui-form>
 				<form id="backoffice-organiser-form" @submit=${this._onSubmit} name="backofficeOrganiserForm">
 					<uui-form-layout-item>
@@ -150,28 +166,6 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 					<p>
 						${this.localize.term("boo_introduction")}
 					</p>
-					<div>
-
-						${this.types.map(x => {
-							const count = this._getItems(x.value).length;
-							return html`
-
-								<div>
-									<div>
-										<h5>
-											${x.label}
-										</h5>
-										<p>
-											${count} ${this.localize.term("boo_numberOfOrganisers", count)}
-										</p>
-									</div>
-									<uui-button @click="${() => this._showInfoModal(x)}">
-										${this.localize.term("general_info")}
-									</uui-button>
-								</div>
-							`;
-						})}
-					</div>
 					<uui-button-group>
 						<uui-button look="outline"
 									href="https://github.com/jcdcdev/Umbraco.Community.BackOfficeOrganiser/?tab=readme-ov-file#umbracocommunitybackofficeorganiser"
@@ -196,7 +190,6 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 				<br>
 				<uui-box headline="${this.localize.term("boo_organise")}">
 					${this.loading ? loader : form}
-
 				</uui-box>
 			</div>
 		`;
@@ -293,38 +286,21 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 	static styles = [
 		css`
 			.dashboard {
-				padding: 24px;
-			}
-
-			.organise-type-container uui-button {
-				width: 100%;
-			}
-
-			.toast-container {
-				top: 0;
-				left: 0;
-				right: 0;
-				height: 100vh;
-				padding: var(--uui-size-layout-1);
+				padding: var(--uui-size-6);
 			}
 
 			.organise-type-container {
 				display: flex;
 				flex-direction: row;
 				gap: var(--uui-size-3);
-				max-width: 900px;
 			}
 
-			.organise-type {
+			.organiser-type {
+				margin-right: var(--uui-size-6);
+			}
+
+			.organiser-type uui-button {
 				width: 100%;
-				background-color: var(--uui-color-background);
-				cursor: pointer;
-				padding: var(--uui-size-6);
-			}
-
-			.organise-type.active {
-				background-color: var(--uui-color-selected);
-				color: white;
 			}
 		`
 	]
@@ -347,7 +323,6 @@ export default class BackofficeOrganiser extends UmbElementMixin(LitElement) {
 		}
 
 		return items;
-
 	}
 }
 

@@ -48,6 +48,15 @@ public class BackOfficeOrganiserService(
         return Attempt<OrganiseType>.Succeed(organise);
     }
 
+    public IEnumerable<IOrganiseAction> GetActions(OrganiseType type) => type switch
+    {
+        OrganiseType.ContentTypes => contentTypeOrganiser.GetOrganiseActions(),
+        OrganiseType.MediaTypes => mediaTypeOrganiser.GetOrganiseActions(),
+        OrganiseType.MemberTypes => memberTypeOrganiser.GetOrganiseActions(),
+        OrganiseType.DataTypes => dataTypeOrganiser.GetOrganiseActions(),
+        _ => []
+    };
+
     public async Task<Attempt<OrganiseType>> OrganiseDataTypesAsync()
     {
         try

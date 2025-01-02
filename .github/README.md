@@ -64,6 +64,7 @@ You can implement your own `Organise Action`, a method that determines where a t
 using jcdcdev.Umbraco.Core.Extensions;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Community.BackOfficeOrganiser.Core.OrganiseActions;
 
 namespace Umbraco.Community.BackOfficeOrganiser.Organisers.ContentTypes;
 

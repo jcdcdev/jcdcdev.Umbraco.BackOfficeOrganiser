@@ -1,5 +1,7 @@
 ﻿export default {
 	boo: {
+		selected: "Selected",
+		disabled: "Disabled",
 		numberOfOrganisers: (count: any) => {
 			if ((parseInt(count) || 0) === 1) {
 				return "Organiser";
